@@ -1,5 +1,7 @@
 # Neural style transfer experiments at sustainable human scale
 
+**Important note:** this page *and* this repository are being updated as experiments end and are ready to be posted, and so they will both change considerably as new material is added.
+
 ## Introduction
 
 **Abstract.** In what follows I will report, in long form and with various Python scripts and Jupyter Notebooks, on experiements with transfer learning and more precisely neural style transfer. I will restrict to the scenario of transforming a photograph to *look like* a famous painting (Van Gogh's *The Starry Night* unless otherwise noted). The interest is at once 
@@ -15,7 +17,7 @@ I will use these two aspects as soft metrics throughout.
 - achieve interesting (for some *reasonable definition of interesting*) results on a human-scale budget, on middle-to-low-level hardware (could be years old), perhaps without using GPU training or even CPU parallelization;
 - achieve human-scale *displayable and printable* images; note that there is a large difference between the two image scales here, and my experiments will for the most part use images of **size 533x400** width times height, which is the *display scale*. The *printable scale* is two orders of magnitude (100) times bigger (10x in each direction): for a 30x40 cm quality print, one is looking at images of 20+ megapixels, or gigantic resolutions on the order of **6000x4500** pixels. The printable scale is perhaps beyond any reasonable machine learning algorithm for the moment (late 2022), at least without any serious upsampling or other heavy pre/post-processs image manipulation tricks, and this scale is certainly beyond what any *human-scale computer* (i.e. one as described in the previor paragraph) can currently do in a matter of hours or a few days.
 
-## A brief introduction to (neural style) transfer learning (under construction)
+## Brief introduction to (neural style) transfer learning (under construction)
 
 ## Models and experiments
 
