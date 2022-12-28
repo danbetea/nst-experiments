@@ -61,6 +61,8 @@ $$Gr(X)_{kk'} = \frac{1}{(2 n_c n_h n_w)^2} \sum_{i=1}^{n_h} \sum_{j=1}^{n_w} a_
 
 with $a_{ijk}(X)$ the value of the activation tensor at level $\ell$ on input $X$ (either $C$ or $G$), and it usually has shape (assuming a channel last approach) $n_h \times n_w \times n_c$ where $n_h$ is the height of the image at that stage (likewise $n_w$ stands for width, $n_c$ for the number of channels). Finally $\delta_\ell$'s are weights to be chosed for the appropriate layers. Each measures how important the respective layer is.
 
+**Important remark.** In the description above, NST takes $C$ and $S$ as inputs, and manipulates $C$ into a successive number of $G$'s until some convergence is reached. One can equally start with a random noise image $X$ instead of $C$ and do the procedure just described, or with a combination of $C+X$ for some random noise image $X$. More importantly, one can *and should* experiment with all sorts of starting points as far as esthetics is concerned if time and other resources permit. 
+
 ## Models and experiments
 
 ### Experiment 1: by the book
