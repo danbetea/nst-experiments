@@ -27,7 +27,7 @@ On the software side, the following standard packages are used alongside Python 
 - ```matplotlib```
 - ```imagemagick``` (to make gifs or do other image conversions)
 
-On the scientific side, I assume enough knowledge of machine learning and linear algebra to start experimentation. A quick basic tutorial is [this great website by Harrish Narayanan](https://github.com/titu1994/Neural-Style-Transfer). A very brief introduction preaching to the choir (i.e. for people already familiar with machine learning) is given below.
+On the scientific side, I assume enough knowledge of machine learning and linear algebra to start experimentation. A quick basic tutorial is [this great website by Harish Narayanan](https://github.com/titu1994/Neural-Style-Transfer). A very brief introduction preaching to the choir (i.e. for people already familiar with machine learning) is given below.
 
 On the artistic side, I assume nothing, and what perhaps looks interesting to me looks completely bizarre to a million other randomly sampled people.
 
@@ -39,7 +39,7 @@ To quote François Chollet from the [Keras webpage](https://keras.io/guides/tran
 
 For us models mean (convolutional) neural networks, usually trained on the ImageNet database. Two such examples are the VGG16 and VGG19 networks of Simonyan and Zisserman referenced below. They can be found in the [Keras applications API](https://keras.io/api/applications/vgg/).
 
-Neural style transfer (NST) is a form of transfer learning originally introduced in the paper of Gatys et al referenced below. For a detailed textbook description, see Chollet's *Deep learning with Python*, second edition, from Manning Press (referenced below). See also the article *Convolutional neural networks for artistic style transfer* by Harrish Narayanan (from his website, referenced below).
+Neural style transfer (NST) is a form of transfer learning originally introduced in the paper of Gatys et al referenced below. For a detailed textbook description, see Chollet's *Deep learning with Python*, second edition, from Manning Press (referenced below). See also the article *Convolutional neural networks for artistic style transfer* by Harish Narayanan (from his website, referenced below).
 
 In its simplest form, NST takes a content image $C$, and via a sequence of manipulations, it transforms it into a generated image $G$ by trying to *add the style* of another image, the style image $S$. This being machine learning with neural networks, $C,S,G$ are to be thought of as vectors (or tensors if you wish). The problem is then to find, after a number of iterations of the learning algorithm, the image $G$ which maximizes the following loss function:
 
