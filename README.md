@@ -1,6 +1,6 @@
 # Neural style transfer experiments at sustainable human scale
 
-**Important note:** this page *and* this repository are being updated as experiments end and are ready to be posted, and so they will both change considerably as new material is added.
+**Important note:** this page, *and this repository more generally*, are being constantly updated as experiments end and are ready to be posted, and so will change considerably as new material is added.
 
 ## Introduction
 
