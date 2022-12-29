@@ -52,7 +52,7 @@ For us models mean (convolutional) neural networks, usually trained on the Image
 
 Neural style transfer (NST) is a form of transfer learning originally introduced in the paper of Gatys et al referenced below. For a detailed textbook description, see Chollet's *Deep learning with Python*, second edition, from Manning Press (referenced below). See also the article *Convolutional neural networks for artistic style transfer* by Harish Narayanan (from his website, referenced below).
 
-In its simplest form, NST takes a content image $C$, and via a sequence of manipulations, it transforms it into a generated image $G$ by trying to *add the style* of another image, the style image $S$. This being machine learning with neural networks, $C,S,G$ are to be thought of as vectors (or tensors if you wish). The problem is then to find, after a number of iterations of the learning algorithm, the image $G$ which maximizes the following loss function:
+In its simplest form, NST takes a content image $C$, and via a sequence of manipulations, it transforms it into a generated image $G$ by trying to *add the style* of another image, the style image $S$. This being machine learning with neural networks, $C,S,G$ are to be thought of as vectors (or tensors if you wish). The problem, posed as an optimization (minimization) problem by Gatys et al in a simplified form (with $\gamma=0$ below, see references) is  as follows. Find, after a number of iterations of the learning algorithm, the image $G$ which minimizes the following loss function:
 
 $$ L(G) = \alpha \cdot L_c(C, G) + \beta \cdot L_s(G, S) + \gamma \cdot L_{TV} (G) $$
 
