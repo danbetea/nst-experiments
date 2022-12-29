@@ -2,9 +2,30 @@
 
 **Important note:** this page, *and this repository more generally*, are being constantly updated as experiments end and are ready to be posted, and so will change considerably as new material is added.
 
+## Few line description
+
+In this repository and on this page I will address the following questions: **how** can one transform an image (e.g. a random photograph) like the one on the left below[^1] to look like it was painted in the style of the middle image (Van Gogh's "The Starry Night"), perhaps obtaining a gif[^2] of the transformation like the one in the image below on the right? **How long** does it take to produce such results on regular laptop hardware? **What results** are even possible?
+
+<table>
+  <tc>
+    <td> <img src="/images/san_francisco_small.png"  alt="content" width = 240px height = 180px ></td>
+  </tc> 
+  <tc>
+    <td><img src="/images/van_gogh_starry_night_small.png" alt="style" width = 240px height = 180px></td>
+  </td>
+  </tc>
+  <tc>
+    <td><img src="/images/animation_chollet_book_exp1_r1.gif" alt="generated animation" width = 240px height = 180px></td>
+  </td>
+  </tc>
+</table>
+
+[^1]: For the sake of reproducibility I am using the same source image as in (Section 12.3 of the) the book by François Chollet, *Deep learning with Python*, Manning Press, second edition. It is one of the standard texts on deep learning algorithms with Python and Tensorflow/Keras, and the only one I know of discussing the techniques in this report.
+[^2]: If the gif is not animated, please click on it.
+
 ## Introduction
 
-**Abstract.** In what follows I will report, in long form and with various Python scripts and Jupyter Notebooks, on experiements with transfer learning and more precisely neural style transfer. I will restrict to the scenario of transforming a photograph to *look like* a famous painting (Van Gogh's *The Starry Night* unless otherwise noted). The interest is at once 
+**Brief description.** In what follows I will report, in long form and with various Python scripts and Jupyter Notebooks, on experiements with transfer learning and more precisely neural style transfer. I will restrict to the scenario of transforming a photograph to *look like* a famous painting (Van Gogh's *The Starry Night* unless otherwise noted). The interest is at once 
 - practical: running times of various algorithms, optimization schemes, etc. on *normal/old hardware* 
 - and abstract: how pleasant and usable the results are. 
 
@@ -78,7 +99,7 @@ with $a_{ijk}(X)$ the value of the activation tensor at level $\ell$ on input $X
 
 ## Models and experiments
 
-### Experiment 1: by the book
+### Experiment 1: by the book (under construction)
 
 ### Experiment 2: theme and variations (under construction)
 
