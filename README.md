@@ -101,6 +101,45 @@ with $a_{ijk}(X)$ the value of the activation tensor at level $\ell$ on input $X
 
 ### Experiment 1: by the book (under construction)
 
+The first experiment, a base line as it were, consists of François Chollet's long description of the Gatys et al paper as given in Section 12.3 of his book *Deep learning with Python* (second edition). The relevant file is the Jupyter notebook ```nst_orig_chollet_book.ipynb```. The network used in the text, and the one in the code, is the VGG19 network of Symonian and Zisserman. All parameters for the original run, including the number of iterations (4000) were left unchanged. In particular the weights for style, content, and total variation are as follows:
+
+$$ \alpha = 2.5 \cdot 10^{-8}, \beta = 10^{-6}, \gamma = 10^{-6}. $$
+
+Other runs were made at 1000 training step iterations, with both VGG19 and VGG16 (changing from one to the other is a matter of simply replacing 16 by 19 in the cell loading the network). The optimizer was always ```SGD``` with a massive (for my intuition) learning rate of 100 (decreasing every 100 steps). 
+
+#### Time measurements
+
+In terms of timing I can report the following:
+
+- the difference between VGG16 and VGG19 is somewhat significant:
+
+| Time per 100 training steps | Network   |
+|-----------------------------|-----------|
+| approx 15 min               | VGG16     |
+| approx 18 min               | VGG19     |
+
+- otherwise, absent any parallelization, things are slow, at least measured against the human perception of "computers being fast":
+
+| Total time           | Network | Number of training steps | Run no. |
+|----------------------|---------|--------------------------|---------|
+| approx 12h           | VGG19   | 4000                     | 1       |
+| approx 2h 30min      | VGG16   | 1000                     | 2       |
+| approx 2h 42min      | VGG16   | 1000                     | 3       |
+| approx 2h 43min      | VGG16   | 1000                     | 4       |
+
+Runs 3 and 4 have had the weights $\alpha, \beta, \gamma$ changed a bit. For example, in Run 4 $\alpha = 10^{-9}$ and $\gamma = 10^{-10}$ so I de-emphasize content and neglect continuity in the image. In terms of running time it makes little difference.
+
+Here are some remarks:
+
+- that this algorithm is slow absent any parallelization has been reported in every source I could find on the matter (and in almost all of the cited references). Just how slow things were was unclear until now;
+- parameter tuning seems out of reach with this method;
+- it is difficult to decrease the learning rate and still have the gradient descent algorithm *actually decrease the loss function*, so it seems this choice of parameters $\alpha, \beta, \gamma$ in combination with the learning rate (initially 100) is rather rigid;
+- *visually*, results similar to the final result seem to be achieved after fewer than 1000 iterations, perhaps as low as 500 or 600.
+
+#### Artistic measurements
+
+How interesting are the results? First, despite the vast difference in running times, the results are rather similar, at least at the tiny resolution of 400x533 height x width.
+
 ### Experiment 2: theme and variations (under construction)
 
 ## References
