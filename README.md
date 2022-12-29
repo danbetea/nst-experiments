@@ -4,7 +4,7 @@
 
 ## Few line description
 
-In this repository and on this page I will address the following questions: **how** can one transform an image (e.g. a random photograph) like the one on the left below[^1] to look like it was painted in the style of the middle image (Van Gogh's "The Starry Night"), perhaps obtaining a gif[^2] of the transformation like the one in the image below on the right? **How long** does it take to produce such results on regular laptop hardware? **What results** are even possible?
+In this repository and on this page I will address the following questions: **how** can one transform an image (e.g. a random photograph) like the one on the left below[^1] to look like it was painted in the style of the middle image (Van Gogh's "The Starry Night"), perhaps obtaining a gif[^2] of the transformation like the one in the image below on the right? **How long** does it take to produce such results on regular laptop hardware? **What kind of results** are even possible?
 
 <table>
   <tc>
