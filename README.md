@@ -8,7 +8,7 @@
 - practical: running times of various algorithms, optimization schemes, etc. on *normal/old hardware* 
 - and abstract: how pleasant and usable the results are. 
 
-I will use these two aspects as soft metrics throughout.
+I will use and *report* these two aspects as soft metrics throughout.
 
 **Idea, use case scenario, and some questions.** Suppose an artist, *owning normal or even past-its-prime hardware* (perhaps a 7 or 10 year-old Macbook Pro/Air, perhaps a 3-4 year-old PC), would like to add neural style transfer to their techniques. Is this possible given the contraints? Is this feasible? Can subjectively interesting results be achieved given enough time? Is the investment in learning neural networks and using a machine learning platform worth it despite the possible impracticality of the actual algorithms and uselessness of the results generated? That is, can transfer learning be achived at the human level and the techniques be useful somewhere else down the pipeline? (The last question obviously transcends whether the user is an artist.) Is is sustainable? (Is it environmentally sustainable? Is electricity pricing making this prohibitive to do at home? Is it resource intensive to the point one has to dedicate a computer solely to the task?) 
 
@@ -31,7 +31,18 @@ On the scientific side, I assume enough knowledge of machine learning and linear
 
 On the artistic side, I assume nothing, and what perhaps looks interesting to me looks completely bizarre to a million other randomly sampled people.
 
-## Brief introduction to (neural style) transfer learning (under construction)
+## Hardware
+
+The following hardware has been used for the experiments
+
+- 2019 HP EliteBook 735 G6 14", 32 GB of RAM, AMD Ryzen 5 Pro 3500U CPU, Ubuntu 22.04
+- 2015 Macbook Pro Retina 13", 8GB of RAM, Inter Core i5 CPU, MacOS Big Sur
+
+and *in practice the HP laptop has been used* for running the code more often than not as it is slightly faster and less useful in day-to-day activities (in no small part due to poor battery life).
+
+**Remark.** Things may change here and these changes will be reported as I upgrade computers, or perhaps migrate some experiments in the cloud, etc.
+
+## Brief introduction to (neural style) transfer learning
 
 To quote François Chollet from the [Keras webpage](https://keras.io/guides/transfer_learning/) explaining the subject,
 
