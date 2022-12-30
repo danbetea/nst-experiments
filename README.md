@@ -166,7 +166,7 @@ Nevertheless, in the course of testing various hyperparameters that failed to ma
 - Chollet, *Neural style transfer*, [Keras.io GitHub examples repository](https://github.com/keras-team/keras-io/blob/master/examples/generative/neural_style_transfer.py)
 - Chollet, *Transfer learning and fine-tuning*, [Keras website tutorial](https://keras.io/guides/transfer_learning/)
 - Gatys, Ecker, Bethge, *Image style transfer using convolutional neural networks*, [link to PDF](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf), [link to arXiv](https://arxiv.org/abs/1508.06576)
-- Johnson, Alahi, Fei-Fei, *Perceptual losses for real-time style transfer and super-resolution*, [link to arXiv](https://arxiv.org/abs/1603.08155)
+- Johnson, Alahi, Fei-Fei, *Perceptual losses for real-time style transfer and super-resolution*, [link to arXiv](https://arxiv.org/abs/1603.08155), [publication and supplementary material](https://link.springer.com/chapter/10.1007/978-3-319-46475-6_43)
 - Log0, *Neural style painting*, [GitHub repository](https://github.com/log0/neural-style-painting)
 - Narayanan, *Convolutional neural networks for artistic style transfer*, [website](https://harishnarayanan.org/writing/artistic-style-transfer/) and [GitHub repository](https://github.com/titu1994/Neural-Style-Transfer)
 - Simonyan, Zisserman, *Very deep convolutional networks for large-scale image recognition*, [link to arXiv](https://arxiv.org/pdf/1409.1556.pdf)
