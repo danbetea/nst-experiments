@@ -138,7 +138,7 @@ Here are some remarks:
 
 #### Artistic measurements
 
-How interesting are the results? First, despite the vast difference in running times, the results are similar, though one can indeed see more of the style after a longer number of iterations as exemplified below: side by side are the results of VGG19 at 4000 iterations (run 1 above, on the left) and of VGG16 at 1000 iterations and with different than original $\alpha, \gamma$ (run 2 above, on the right):
+How interesting are the results? First, despite the vast difference in running times between run 1 and run 4, the results are similar. Nevertheless one can indeed see more of the style after a longer number of iterations as exemplified below: side by side are the results of VGG19 at 4000 iterations (run 1 above, on the left) and of VGG16 at 1000 iterations and with different than the original $\alpha, \gamma$ (run 4 above, on the right):
 
 <table>
   <tc>
@@ -152,9 +152,9 @@ How interesting are the results? First, despite the vast difference in running t
 
 #### Conclusion for experiment 1
 
-Experiment 1, by the book, is rather slow to run, and results are interesting but not particularly pleasant to the eye. Cholet acknowledges both points in his book, and further claims one should expect no miracles with these hyperparameters. He further compares the approach to more of a signals processing (noising, denoising, sharpening, etc.) approach than a true AI approach, and certainly the results do not contradict his claims.
+Experiment 1, by the book, is rather slow to run, and results are interesting but not particularly pleasant to the eye. Cholet acknowledges both points in his book, and further claims one should expect no miracles with these hyperparameters. He further the approach to more of a signals processing (noising, denoising, sharpening, etc.) approach than a true deep learning approach, and certainly the results do not contradict his claims. However there are many hyperparameters or blocks of code that can be switched, and the results are promising enough to pursue experimentation.
 
-Nevertheless, in the course of testing various hyperparameters that failed to make the algorithms converge, I accidentally saved one of the resulting images, after just 1 iteration. The result is just below. Now *this is interesting*, much more so than the above, *to my eyes*. Perhaps except the red tint, easily removable in post processing.
+Finally, in the course of testing various hyperparameters that failed to make the training iterations converge (minimize the loss function), I accidentally saved one of the resulting images, after just *one* iteration. The result is below. Now *this is interesting*, much more so than the above, *to my eyes* (perhaps except the red tint, easily removable in post processing).
 
 <img src="/images/book_vgg16_accident.png" alt="run 4 image" width = 533px height = 400px>
 
