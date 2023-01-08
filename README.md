@@ -20,6 +20,22 @@ In this repository and on this page I will address the following questions: **ho
   </tc>
 </table>
 
+Here are a few more samples, from runs of experiments that succeeded as well as ones that failed!
+
+<table>
+  <tc>
+    <td> <img src="/images/var_1_vgg19_5000.jpg"  alt="blended well" width = 240px height = 180px ></td>
+  </tc> 
+  <tc>
+    <td><img src="/images/book_vgg16_accident.png" alt="exploding gradients image" width = 240px height = 180px></td>
+  </td>
+  </tc>
+  <tc>
+    <td><img src="/images/var_1_vgg19_high_noise_2500.jpg" alt="high noise image" width = 240px height = 180px></td>
+  </td>
+  </tc>
+</table>
+
 [^1]: For the sake of reproducibility I am using the same source image as in (Section 12.3 of the) the book by François Chollet, *Deep learning with Python*, Manning Press, second edition. It is one of the standard texts on deep learning algorithms with Python and Tensorflow/Keras, and the only one I know of discussing the techniques in this report.
 [^2]: If the gif is not animated, please click on it.
 
