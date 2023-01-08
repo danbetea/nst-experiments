@@ -1,6 +1,6 @@
 # Neural style transfer experiments at sustainable human scale
 
-**Important note:** this page, *and this repository more generally*, are being constantly updated as experiments end and are ready to be posted, and so will change considerably as new material is added. As of January 1st 2023, this project is still ongoing.
+**Important note:** this page, *and this repository more generally*, are being constantly updated as experiments end and are ready to be posted, and so will change considerably as new material is added. As of January 9th 2023, this project is ongoing.
 
 ## Few line description
 
