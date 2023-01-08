@@ -24,14 +24,14 @@ Here are a few more samples, from runs of experiments that succeeded as well as 
 
 <table>
   <tc>
-    <td> <img src="/images/var_1_vgg19_5000.jpg"  alt="blended well" width = 240px height = 180px ></td>
+    <td> <img src="/images/var_1_vgg19_5000.png"  alt="blended well" width = 240px height = 180px ></td>
   </tc> 
   <tc>
     <td><img src="/images/book_vgg16_accident.png" alt="exploding gradients image" width = 240px height = 180px></td>
   </td>
   </tc>
   <tc>
-    <td><img src="/images/var_1_vgg19_high_noise_2500.jpg" alt="high noise image" width = 240px height = 180px></td>
+    <td><img src="/images/var_1_vgg19_high_noise_2500.png" alt="high noise image" width = 240px height = 180px></td>
   </td>
   </tc>
 </table>
