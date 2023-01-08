@@ -302,4 +302,4 @@ for i in range(epochs):
     if i % 100 == 0:
         # save the generated image at regular intervals
         image = tensor_to_image(generated_image)
-        image.save(f"../images/output/square_image_at_{i:04}.jpg")
+        image.save(f"../images/output/generated_image_at_{i:04}.png")
