@@ -117,7 +117,7 @@ with $a_{ijk}(X)$ the value of the activation tensor at level $\ell$ on input $X
 
 ### Experiment 1: by the book (under construction)
 
-The first experiment, a base line as it were, consists of François Chollet's long description of the Gatys et al paper as given in Section 12.3 of his book *Deep learning with Python* (second edition). The relevant file is the Jupyter notebook ```nst_orig_chollet_book.ipynb```. The network used in the text, and the one in the code, is the VGG19 network of Symonian and Zisserman. All parameters for the original run, including the number of iterations (4000) were left unchanged. In particular the weights for style, content, and total variation are as follows:
+The first experiment, a base line as it were, consists of François Chollet's long description of the Gatys et al paper as given in Section 12.3 of his book *Deep learning with Python* (second edition). The relevant file is the Jupyter notebook ```notebooks/nst_orig_chollet_book.ipynb```. The network used in the text, and the one in the code, is the VGG19 network of Symonian and Zisserman. All parameters for the original run, including the number of iterations (4000) were left unchanged. In particular the weights for style, content, and total variation are as follows:
 
 $$ \alpha = 2.5 \cdot 10^{-8}, \beta = 10^{-6}, \gamma = 10^{-6}. $$
 
@@ -176,6 +176,21 @@ Finally, in the course of testing various hyperparameters that failed to make th
 
 ### Experiment 2: theme and variations (under construction)
 
+The relevant file for this experiment is the Python script ```src/nst_var_1.py``` (for a change, I decided on a Python script, a Jupyter notebook might also appear at some point). The approach is similar to that of Chollet but borrows ideas from the implementations of Narayanan and GitHub user Log0; the below references and also the [Coursera course](https://www.coursera.org/learn/convolutional-neural-networks) on convolutional neural networks. The main differences between the two approaches are:
+
+- the Adam optimizer with a learning rate of 0.01 (Kinga and Ba, see reference) is used in this case as opposed to Stochastic Gradient Descent (with a whopping original learning rate of 100 used in the original approach);
+- there is no total variation cost/loss in the overall loss function (in the above, $\gamma = 0$);
+- the weights $\alpha, \beta$ as well as the style weights $\delta_\ell$ for each style layer $\ell$ considered are different, and more importantly they are hand-coded for this situation (for experiment 1, the $\alpha_\ell$'s were set automatically depending on the layer). In particular the following values already seem to give promising results:
+
+$$ \alpha = 5, \beta = 100;$$
+
+- the training step and the cost functions are wrapped in a ```@tf.function()``` decorator to compile them for faster performance
+- the original image (input) is not the content image, but rather a blend of uniform noise and the content image (i.e. a noise image correlated to some extent with the input).
+
+#### Time measurements
+
+The combination of hyperparameters, dropping the total variation loss, and using a noisy image for the start (as advertised already in the original paper of Gatys et al) makes this approach significantly faster for achieving the same types of results. Alternatively, one can wait similar times to those from experiment one but achieve much more "blended" images.
+
 ## References
 
 - Chollet, *Deep learning with Python*, second edition, [publisher's website](https://www.manning.com/books/deep-learning-with-python-second-edition) and [GitHub repositiory](https://github.com/fchollet/deep-learning-with-python-notebooks)
@@ -183,6 +198,7 @@ Finally, in the course of testing various hyperparameters that failed to make th
 - Chollet, *Transfer learning and fine-tuning*, [Keras website tutorial](https://keras.io/guides/transfer_learning/)
 - Gatys, Ecker, Bethge, *Image style transfer using convolutional neural networks*, [link to PDF](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf), [link to arXiv](https://arxiv.org/abs/1508.06576)
 - Johnson, Alahi, Fei-Fei, *Perceptual losses for real-time style transfer and super-resolution*, [link to arXiv](https://arxiv.org/abs/1603.08155), [publication and supplementary material](https://link.springer.com/chapter/10.1007/978-3-319-46475-6_43)
+- Kingma, Ba, *Adam: a method for stochastic optimization*, [link to arXiv](https://arxiv.org/abs/1412.6980)
 - Log0, *Neural style painting*, [GitHub repository](https://github.com/log0/neural-style-painting)
 - Narayanan, *Convolutional neural networks for artistic style transfer*, [website](https://harishnarayanan.org/writing/artistic-style-transfer/) and [GitHub repository](https://github.com/titu1994/Neural-Style-Transfer)
 - Simonyan, Zisserman, *Very deep convolutional networks for large-scale image recognition*, [link to arXiv](https://arxiv.org/pdf/1409.1556.pdf)
