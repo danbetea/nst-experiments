@@ -174,7 +174,7 @@ Finally, in the course of testing various hyperparameters that failed to make th
 
 <img src="/images/book_vgg16_accident.png" alt="run 4 image" width = 533px height = 400px>
 
-### Experiment 2: theme and variations (under construction)
+### Experiment 2: theme and variations
 
 The relevant file for this experiment is the Python script ```src/nst_var_1.py``` (for a change, I decided on a Python script, a Jupyter notebook might also appear at some point). The approach is similar to that of Chollet but borrows ideas from the implementations of Narayanan and GitHub user Log0; the below references and also the [Coursera course](https://www.coursera.org/learn/convolutional-neural-networks) on convolutional neural networks. The main differences between the two approaches are:
 
@@ -189,7 +189,39 @@ $$ \alpha = 5, \beta = 100;$$
 
 #### Time measurements
 
-The combination of hyperparameters, dropping the total variation loss, and using a noisy image for the start (as advertised already in the original paper of Gatys et al) makes this approach significantly faster for achieving the same types of results. Alternatively, one can wait similar times to those from experiment one but achieve much more "blended" images.
+The combination of hyperparameters, dropping the total variation loss, and using a noisy image for the start (as advertised already in the original paper of Gatys et al) makes this approach significantly faster for achieving the same types of results. Alternatively, one can wait similar times to those from experiment one but achieve much more "blended" images. No significant difference has been observed using this approach between the use of VGG19 and VGG16. Below are some runs of the program:
+
+| Total time           | Network | Number of training steps | Run no. |
+|----------------------|---------|--------------------------|---------|
+| approx 4h 45min      | VGG19   | 5000                     | 1       |
+| approx 1h 06min      | VGG16   | 1000                     | 2       |
+| approx 2h 50min      | VGG19   | 2500                     | 3       |
+
+I suspect the 2x or 2.5x speedup from the previous setting is due to a variety of factors, and here testing each one individually is necessary to draw a better conclusion. They are:
+
+- use of noise in the input image
+- use of better hyperparameters (for example the choice of $\alpha_\ell$'s in constructing the style weights)
+- use of another optimization algorithm (Adam)
+- drop of the total variation component of the loss function
+- more aggressive use of ```@tf.function()``` decorator (probably the least significant of the speedups)
+
+#### Artistic measurements
+
+For the same number of runs, *to my eye*, this approach gives much better results. Below is a gif of running the algorithm for 5000 training steps (run 1 described in the table of the previous section). Anectodically it seemed that about 3500 training steps would have sufficed for a similar result.
+
+<img src="/images/animation_var_1.gif" alt="animation experiment 2" width = 533px height = 400px>
+
+Finally changing the amount of noise present in the input image can significantly alter the result. An example of "tripling" the amount of noise from one run to another is given below.
+
+<table>
+  <tc>
+    <td> <img src="/images/var_1_vgg19_5000.png"  alt="blended well image" width = 533px height = 400px ></td>
+  </tc> 
+  <tc>
+    <td><img src="/images/var_1_vgg19_high_noise_2500.png" alt="high noise image" width = 533px height = 400px></td>
+  </td>
+  </tc>
+</table>
 
 ## References
 
