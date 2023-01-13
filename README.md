@@ -184,7 +184,7 @@ The relevant file for this experiment is the Python script ```src/nst_var_1.py``
 
 $$ \alpha = 5, \beta = 100;$$
 
-- the training step and the cost functions are wrapped in a ```@tf.function()``` decorator to compile them for faster performance
+- the training step and the cost functions are wrapped in a ```@tf.function()``` decorator them for faster performance
 - the original image (input) is not the content image, but rather a blend of uniform noise and the content image (i.e. a noise image correlated to some extent with the input).
 
 #### Time measurements
