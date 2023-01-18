@@ -1,6 +1,7 @@
 from PIL import Image
 import numpy as np
 import tensorflow as tf
+from time import time
 
 
 
@@ -49,7 +50,7 @@ style_layers = [
 # for vgg19, one can use also block5_conv4
 content_layer = [('block5_conv3', 1)]   
 
-# loading images, putting them into tensorflow constants
+# loading images, putting them into 4D tensorflow constants
 content_image = np.array(Image.open("../images/san_francisco_small.png").resize((img_width, img_height)))
 content_image = tf.constant(np.reshape(content_image, ((1,) + content_image.shape)))
 style_image =  np.array(Image.open("../images/van_gogh_starry_night_small.png").resize((img_width, img_height)))
@@ -61,7 +62,7 @@ alpha = 5
 beta = 100
 
 # number of training steps
-epochs = 2501
+num_epochs = 2501
 
 # optimizer used
 optimizer = tf.keras.optimizers.Adam(learning_rate=0.01)
@@ -88,13 +89,6 @@ def tensor_to_image(tensor):
         tensor = tensor[0]
     return Image.fromarray(tensor)
 
-def gram_matrix(A):
-    """
-    computes GA = A * transpose(A) with A a matrix of shape (n_C, n_H * n_W)
-    """  
-    GA = tf.linalg.matmul(A, tf.linalg.matrix_transpose(A))
-    return GA
-
 
 
 
@@ -105,6 +99,8 @@ def gram_matrix(A):
 
 # first content loss
 
+# compiled, so it runs fast, probably not much difference here
+@tf.function()
 def compute_content_loss(content_output, generated_output):
     """
     computes the content cost
@@ -122,20 +118,28 @@ def compute_content_loss(content_output, generated_output):
     a_G = generated_output[-1] # of shape (1, n_H, n_W, n_C)
         
     # retrieve the dimensions of each
-    _, n_H, n_W, n_C = a_G.shape 
+    # m = batch size = 1 here
+    m, n_H, n_W, n_C = a_G.shape 
     
-    # reshape a_C and a_G so they're (_, n_H * N_W, n_C) 
-    a_C_unrolled = tf.reshape(a_C, shape=[_, -1, n_C])
-    a_G_unrolled = tf.reshape(a_G, shape=[_, -1, n_C])
+    # reshape a_C and a_G so they're of shape (m = 1, n_H * N_W, n_C) 
+    a_C_r = tf.reshape(a_C, shape=[m, -1, n_C])
+    a_G_r = tf.reshape(a_G, shape=[m, -1, n_C])
     
     # compute the L^2 content cost
     # NOTE: can divide by other things here
-    L_content = tf.math.square(tf.norm(a_C_unrolled - a_G_unrolled))/(4*n_H*n_W*n_C)
-        
+    # I chose the same normalization as in the style loss
+    division_constant = 4 * (n_H*n_W*n_C)**2.
+    # L_content = ||a_C_r - a_G_r||^2 / division_constant, with ||.|| = L^2 norm
+    L_content = tf.math.divide(tf.math.reduce_sum(tf.math.square(tf.math.subtract(a_C_r, a_G_r))),  
+                               division_constant
+                              )
+
     return L_content
 
 # next style loss in a few steps
 
+# compiled, so it runs fast, probably not much difference here
+@tf.function()
 def compute_layer_style_loss(a_S, a_G):
     """
     input:
@@ -146,8 +150,8 @@ def compute_layer_style_loss(a_S, a_G):
     L_style_layer = style cost for a specific layer
     """
     
-    # Retrieve dimensions from a_G
-    _, n_H, n_W, n_C = a_G.get_shape().as_list()
+    # Retrieve dimensions from a_G, m = batch size = 1 here
+    m, n_H, n_W, n_C = a_G.shape
     
     # reshape so that final shape is (n_C, n_H * n_W)
     a_S = tf.transpose(a_S, perm=[0, 3, 1, 2]) # shape is now (_, n_C, n_H, n_W)
@@ -156,17 +160,21 @@ def compute_layer_style_loss(a_S, a_G):
     a_G = tf.reshape(a_G, shape=[n_C, n_H * n_W])
 
     # the actual loss
-    G_S = gram_matrix(a_S)
-    G_G = gram_matrix(a_G)
-    L_style_layer = tf.math.divide( \
-                                   tf.math.reduce_sum(tf.math.square(tf.math.subtract(G_S, G_G))), \
-                                   (4 * (n_C**2.) * (n_H**2.) * (n_W**2.)) \
+    # first we compute the Gram matrices, i.e. for A, Gram_A = A . transpose(A)
+    Gram_S = tf.linalg.matmul(a_S, tf.linalg.matrix_transpose(a_S))
+    Gram_G = tf.linalg.matmul(a_G, tf.linalg.matrix_transpose(a_G))
+    # the loss per layer is ||Gram_S - Gram_G||^2 / division_constant
+    division_constant = 4 * (n_C**2.) * (n_H**2.) * (n_W**2.)
+    L_style_layer = tf.math.divide(tf.math.reduce_sum(tf.math.square(tf.math.subtract(Gram_S, Gram_G))), 
+                                   division_constant
                                   )    
     
     return L_style_layer
 
 # computes overall style loss
 
+# compiled, so it runs fast, probably not much difference here
+@tf.function()
 def compute_style_loss(style_image_output, generated_image_output, style_layers=style_layers):
     """
     computes the overall style cost from several chosen layers
@@ -184,15 +192,13 @@ def compute_style_loss(style_image_output, generated_image_output, style_layers=
 
     # set a_S = hidden layer activation for style image from the layers selected, concatenated
     # the last element contains the content layer image, which we don't want
-    # same for a_G, but for generated image
+    # same for a_G for the generated image
     a_S = style_image_output[:-1]
     a_G = generated_image_output[:-1]
 
     for i, weight in zip(range(len(a_S)), style_layers):  
-        # style loss for the current layer
-        L_style_layer = compute_layer_style_loss(a_S[i], a_G[i])
-        # added with the correct weight
-        L_style += weight[1] * L_style_layer
+        # add style loss for the current layer, with correct weight
+        L_style += weight[1] * compute_layer_style_loss(a_S[i], a_G[i])
 
     return L_style
 
@@ -200,12 +206,11 @@ def compute_style_loss(style_image_output, generated_image_output, style_layers=
 
 # compiled, so it runs fast
 @tf.function()
-def total_loss(L_content, L_style, alpha = 10, beta = 40):
+def total_loss(L_content, L_style, alpha = 10, beta = 50):
     """
     computes the total cost function L = alpha * L_content + beta * L_style
     """
-    L = alpha * L_content + beta * L_style
-    return L
+    return alpha * L_content + beta * L_style
 
 
 
@@ -215,11 +220,11 @@ def total_loss(L_content, L_style, alpha = 10, beta = 40):
 # initialize generated image
 #
 
-# instantiate the generated_image as the content_image
-generated_image = tf.Variable(tf.image.convert_image_dtype(content_image, tf.float32))
-# add some noise to the generated_image to make convergence faster
+# instantiate the generated_image as the content_image + noise 
+# (makes for faster convergence)
 # NOTE: lots of optimization can go into the noise values here
-noise = tf.random.uniform(tf.shape(generated_image), -0.2, 0.2)
+generated_image = tf.Variable(tf.image.convert_image_dtype(content_image, tf.float32))
+noise = tf.random.uniform(tf.shape(generated_image), -0.2, 0.2) # noise to be added
 generated_image = tf.add(generated_image, noise)
 # clip the final result and convert into variable (again!)
 generated_image = tf.clip_by_value(generated_image, clip_value_min=0.0, clip_value_max=1.0)
@@ -238,7 +243,6 @@ def get_layer_outputs(vgg, layer_names):
     returns a list of model's (vgg16 or 19) intermediate layers output values
     """
     outputs = [vgg.get_layer(layer[0]).output for layer in layer_names]
-
     model = tf.keras.Model([vgg.input], outputs)
     return model
 
@@ -295,10 +299,12 @@ def train_step(generated_image):
 # the actual training
 #
 
-for i in range(epochs):
+for i in range(num_epochs):
+    tic = time()
     L = train_step(generated_image)
-    # comment out if you don't want to look at each individual step
-    print(f"Iteration {i:04}: loss={L:.4f}")
+    toc = time()
+    # comment out the next two lines if you don't want to look at each individual step in 
+    print(f"iteration {i:04}: loss={L:.4f} time={(toc - tic):02.4f}")
     if i % 100 == 0:
         # save the generated image at regular intervals
         image = tensor_to_image(generated_image)
