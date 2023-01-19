@@ -158,10 +158,10 @@ How interesting are the results? First, despite the vast difference in running t
 
 <table>
   <tc>
-    <td> <img src="/images/book_vgg19_4000.png"  alt="run 1 image" width = 533px height = 400px ></td>
+    <td> <img src="/images/book_vgg19_4000.png"  alt="run 1 image" width = 400px height = 300px ></td>
   </tc> 
   <tc>
-    <td><img src="/images/book_vgg16_1000.png" alt="run 4 image" width = 533px height = 400px></td>
+    <td><img src="/images/book_vgg16_1000.png" alt="run 4 image" width = 400px height = 300px></td>
   </td>
   </tc>
 </table>
@@ -215,10 +215,10 @@ Finally changing the amount of noise present in the input image can significantl
 
 <table>
   <tc>
-    <td> <img src="/images/var_1_vgg19_5000.png"  alt="blended well image" width = 533px height = 400px ></td>
+    <td> <img src="/images/var_1_vgg19_5000.png"  alt="blended well image" width = 400px height = 300px ></td>
   </tc> 
   <tc>
-    <td><img src="/images/var_1_vgg19_high_noise_2500.png" alt="high noise image" width = 533px height = 400px></td>
+    <td><img src="/images/var_1_vgg19_high_noise_2500.png" alt="high noise image" width = 400px height = 300px></td>
   </td>
   </tc>
 </table>
