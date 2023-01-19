@@ -16,12 +16,13 @@ img_width = 533
 img_height = 400
 
 # load VGG19 (16 would also work) model, no top 4 layers, set it to non-trainable
-vgg = tf.keras.applications.VGG19(include_top=False,
+# NOTE: other models could be used
+pretrained_model = tf.keras.applications.VGG19(include_top=False,
                                   input_shape=(img_height, img_width, 3),
                                   weights='imagenet')
 
 # we are not training the model
-vgg.trainable = False
+pretrained_model.trainable = False
 
 # layers and weights to use for the style loss function
 # these are the weights assigned to each layer for the style cost
@@ -78,6 +79,10 @@ optimizer = tf.keras.optimizers.Adam(learning_rate=0.01)
 def tensor_to_image(tensor):
     """
     converts tensor to image with PIL
+
+    input: 3D tensor of floats or 4D tensor with initial entry = 1
+
+    output: an image (PIL)
     """
     # rescale back to max 255, convert to int array
     tensor = tensor * 255
@@ -160,7 +165,7 @@ def compute_layer_style_loss(a_S, a_G):
     a_G = tf.reshape(a_G, shape=[n_C, n_H * n_W])
 
     # the actual loss
-    # first we compute the Gram matrices, i.e. for A, Gram_A = A . transpose(A)
+    # first we compute the Gram matrices, i.e. for A, Gram_A = A x transpose(A)
     Gram_S = tf.linalg.matmul(a_S, tf.linalg.matrix_transpose(a_S))
     Gram_G = tf.linalg.matmul(a_G, tf.linalg.matrix_transpose(a_G))
     # the loss per layer is ||Gram_S - Gram_G||^2 / division_constant
@@ -180,10 +185,11 @@ def compute_style_loss(style_image_output, generated_image_output, style_layers=
     computes the overall style cost from several chosen layers
     
     input:
-    style_image_output = our tensorflow model
-    generated_image_output =
-    style_layers = list containing: (layer name used, a coefficient for each of them)
-    
+    style_image_output = a list of encodings of the style image inside the pretrained model
+    (the last element is for content, everything else is for style)
+    generated_image_output = the same as above, but for the content image
+    style_layers = list containing tuples (layer_name, layer_weight) used for style layers
+
     output: 
     L_style = the style loss
     """
@@ -235,25 +241,32 @@ generated_image = tf.Variable(generated_image)
 
 ##################################################################################
 #
-# style and content encoders
+# style and content encoders, in global variables
 #
 
-def get_layer_outputs(vgg, layer_names):
+def get_layer_outputs(pretrained_model, layer_names):
     """ 
-    returns a list of model's (vgg16 or 19) intermediate layers output values
+    returns a list of model's (vgg16 or 19 in the default example) intermediate layers output values
+
+    input: 
+    retrained_model = out pretrained img classification model *VGG16 or 19 most likely)
+    layer_names = a list of tuples (layer_name, layer_weight)
+           
+    output: 
+    a list of the output values (weights) of the pretrained model corresponding to the layers selected
     """
-    outputs = [vgg.get_layer(layer[0]).output for layer in layer_names]
-    model = tf.keras.Model([vgg.input], outputs)
+    outputs = [pretrained_model.get_layer(layer[0]).output for layer in layer_names]
+    model = tf.keras.Model([pretrained_model.input], outputs)
     return model
 
-vgg_model_outputs = get_layer_outputs(vgg, style_layers + content_layer)
+pretrained_model_outputs = get_layer_outputs(pretrained_model, style_layers + content_layer)
 
 # set a_C and a_S, used for content and style  
 # using content and style layers, from content and style images
 preprocessed_content =  tf.Variable(tf.image.convert_image_dtype(content_image, tf.float32))
-a_C = vgg_model_outputs(preprocessed_content)
+a_C = pretrained_model_outputs(preprocessed_content)
 preprocessed_style =  tf.Variable(tf.image.convert_image_dtype(style_image, tf.float32))
-a_S = vgg_model_outputs(preprocessed_style)
+a_S = pretrained_model_outputs(preprocessed_style)
 
 
 
@@ -269,7 +282,7 @@ def train_step(generated_image):
     with tf.GradientTape() as tape:
 
         # get the encoding of the generated image
-        a_G = vgg_model_outputs(generated_image)
+        a_G = pretrained_model_outputs(generated_image)
         
         # compute style, content, and total cost
         L_style = compute_style_loss(a_S, a_G)
@@ -278,9 +291,7 @@ def train_step(generated_image):
     
     # do gradient descent
     #
-    # here we do 
-    #
-    #          g = g - learning_rate * grad      with g = generated image
+    #          g = g - learning_rate * grad, with g = generated image
 
     # get the gradients    
     grad = tape.gradient(L, generated_image)
@@ -303,8 +314,8 @@ for i in range(num_epochs):
     tic = time()
     L = train_step(generated_image)
     toc = time()
-    # comment out the next two lines if you don't want to look at each individual step in 
-    print(f"iteration {i:04}: loss={L:.4f} time={(toc - tic):02.4f}")
+    # comment out the next line if you don't want to look at each individual step in 
+    print(f"iteration {i:04}: loss={L:.4f} time={(toc - tic):02.2f}")
     if i % 100 == 0:
         # save the generated image at regular intervals
         image = tensor_to_image(generated_image)
